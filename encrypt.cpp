@@ -1,3 +1,11 @@
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -5,8 +13,66 @@
 #include <stdlib.h>
 using namespace std;
 
+char shift_value(char c, int shift_val);
+std::string generate_token(int optional_seed);
+char generate_proxy_val(int seed);
 
-#define ARRAY_SIZE(arr) ( sizeof(arr) / sizeof(arr[0]) ) 
+int main ()
+{
+    // init
+    int resultCode = 0;
+    ofstream  test_output;
+    test_output.open("token.txt");
+
+    // Create token to obfuscate encrypted message later
+    std::string token = generate_token(0);
+
+    // Get input message and populate buffer
+    std::string input = "This is a big ass, motherfucking, test message.";
+    std::string buffer = "";
+    for(char c : input)
+    {
+        if(c != ' ' && c != ',' && c != '.') { buffer.append(1u, c); }
+    }
+
+    // Create shift_code and new random for this session
+    srand(time(NULL));
+    int seed_increment = rand() % 1000;
+    std::string shift_code = "";
+
+    for(char c : buffer)
+    {
+        shift_code.append(1u, generate_proxy_val(seed_increment));
+        seed_increment++;
+    }
+
+    // create proxy message prior to obfuscating
+    std::string proxy = "";
+
+    for(int i = 0; i < shift_code.length(); i++)
+    {
+        char temp = shift_value(buffer[i], (int)shift_code[i]);
+        test_output << temp;
+        proxy.append(1u, temp);
+    }
+    
+    // close out file handles and exit
+    test_output.close();
+    return resultCode;
+}
+
+char shift_value(char c, int shift_val)
+{
+    char temp = c + (shift_val - '0');
+    // could randomly flip-flop here by adding 32 to instead return lower-case letters
+    if ( temp > 'Z' )
+    {
+        char roll_over = char( (temp - 'Z') + '@' );
+        temp = roll_over;
+    }
+
+    return temp;
+}
 
 
 std::string generate_token(int optional_seed)
@@ -37,57 +103,3 @@ char generate_proxy_val(int seed)
     // 48+1 = 49 in ASCII == '1' 
     return result + rando;
 }
-//3161517655311334589161231771536838469
-
-int main ()
-{
-    // init
-    int resultCode = 0;
-    ofstream  test_output;
-    test_output.open("token.txt");
-
-    // Create token to obfuscate encrypted message later
-    std::string token = generate_token(0);
-
-    // Get input message and populate buffer
-    std::string input = "This is a big ass, motherfucking, test message.";
-    std::string buffer = "";
-    for(char c : input)
-    {
-        if(c != ' ' && c != ',' && c != '.') { buffer.append(1u, c); }
-    }
-
-    // Create proxy and new random for this session
-    srand(time(NULL));
-    int seed_increment = rand() % 1000;
-    std::string proxy = "";
-
-    for(char c : buffer)
-    {
-        char temp = generate_proxy_val(seed_increment);
-        test_output << temp;
-        proxy.append(1u, temp);
-        seed_increment++;
-    }
-
-    //test_output << input << "\n" << buffer << "\n" << proxy;
-
-    
-    
-    // close out file handles and exit
-    test_output.close();
-    return resultCode;
-}
-
-/*
-    char input[] = "This is my test message. Hallelujah";
-    char salt[] = ""; // randomized numbers array for character shifting
-    char proxy_message[] = ""; // input message after having been shifted by salt
-
-    // 1 - remove spaces/punctuations
-
-    for(int i = 0; i <= ARRAY_SIZE(input); i++)
-    {
-
-    }
-*/
