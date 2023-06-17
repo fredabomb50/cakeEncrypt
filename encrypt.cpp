@@ -55,7 +55,14 @@ int main ()
         test_output << temp;
         proxy.append(1u, temp);
     }
-    
+
+
+    test_output << "\n";
+    for(char c : shift_code)
+    {
+        test_output << c;
+    }
+     
     // close out file handles and exit
     test_output.close();
     return resultCode;
@@ -64,15 +71,15 @@ int main ()
 char shift_value(char c, int shift_val)
 {
     char temp = c + (shift_val - '0');
-    // could randomly flip-flop here by adding 32 to instead return lower-case letters
     if ( temp > 'Z' )
     {
-        char roll_over = char( (temp - 'Z') + '@' );
-        temp = roll_over;
+        char roll_over = temp - 'Z';
+        temp = '@' + roll_over;
     }
 
     return temp;
 }
+
 
 
 std::string generate_token(int optional_seed)
