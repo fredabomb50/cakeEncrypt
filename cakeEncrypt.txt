@@ -1,0 +1,84 @@
+Take a single input value as the message
+    - read each character
+    - generate a random number in range within 1 and the max length of each input word, looping back to 1 upon reaching 9.
+    - store the resulting number array. punctuation/spacing replaced with a random character from the encrypted message.
+    - 
+
+    2413
+CAKE --> EELH
+     <-- 
+
+
+12345 12 123 12345678
+Death to the infidels
+|
+|
+V (randomized character shifts, within word lengths)
+44152 11 232 84681225 --> HIBYJ UP VKG QRLQEGNX
+|
+|
+V (spaces replaced with first letters of each 'word', inverted)
+Q44152V11U232H84681225
+|
+|
+V + 2413 (shared token; repeated over every punctuation or space)
+AUQ44152UIPOV11NU232IIGH84681225
+
+
+
+
+HIBYJUPVKGQRLQEGNX                  (message)
+AUQ44152UIPOV11NU232IIGH84681225    (key)
+2413                                (token)
+
+AUQ44152UIPOV11NU232IIGH84681225
+    - AU (2)
+Q44152UIPOV11NU232IIGH84681225
+    - Q (punctuation point)
+44152UIPOV11NU232IIGH84681225
+    - UIOP (4)
+44152V11NU232IIGH84681225
+    - V (punctuation point)
+44152 11NU232IIGH84681225
+    - N (1)
+44152 11U232IIGH84681225
+    - U (punctuation point)
+44152 11 232IIGH84681225
+    - IIG (3)
+44152 11 232H84681225
+    - H (punctuation point)
+44152 11 232 84681225
+
+
+HIBYJUPVKGQRLQEGNX + 44152 11 232 84681225 = Death to the infidels
+
+
+aequeosalinocalcalinoceraceoaluminosocupreovitriolic
+|
+|
+V (split into maximum 9-character "words")
+123456789 123456789 123456789 123456789 123456789 1234567
+aequeosal inocalcal inocerace oaluminos ocupreovi triolic
++
+354941631 123215444 659813275 321114837 198413547 7124325
+|
+|
+V (randomized character shift)
+DJUDIPYDM JPREBQGEP OSXKFUCKJ RCMVNMVRZ PLCTSHTZP ASKSOKH
+|
+|
+V (pull random character from each "word" and append to number string, replacing punctuation/spacing if exists; ending in another random characther from first segment)
+354941631 123215444 659813275 321114837 198413547 7124325
+|
+|
+V
+U354941631Q123215444X659813275V321114837T198413547K7124325Y
+|
+|
+V + 2413 (token)
+Uap354941631Qnviu123215444Xs659813275Vgfp321114837Tyz198413547Kojhg7124325Yc
+
+
+DJUDIPYDMJPREBQGEPOSXKFUCKJRCMVNMVRZPLCTSHTZPASKSOKH (message)
+Uap354941631Qnviu123215444Xs659813275Vgfp321114837Tyz198413547Kojhg7124325Yc (hash)
+2413 (token)
