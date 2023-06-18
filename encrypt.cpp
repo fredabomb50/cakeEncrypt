@@ -51,7 +51,7 @@ int main ()
 
     for(int i = 0; i < shift_code.length(); i++)
     {
-        char temp = shift_value(buffer[i], (int)shift_code[i]);
+        char temp = shift_value(buffer[i], shift_code[i]);
         test_output << temp;
         proxy.append(1u, temp);
     }
