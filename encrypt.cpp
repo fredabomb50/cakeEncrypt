@@ -31,27 +31,28 @@ int main ()
         if( (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ) { buffer.append(1u, c); }
     }
 
-    // Create shift_code and new random for this session
-    srand(time(NULL));
-    int seed_increment = rand() % 1000;
+    // Create shift_code
+    int seed = 100;
     string shift_code = "";
-
     for(char c : buffer)
     {
-        shift_code.append(1u, generate_proxy_val(seed_increment));
-        seed_increment++;
+        shift_code.append(1u, generate_proxy_val(seed));
+
+        // new random val
+        srand(seed++);
+        seed = rand() % 1000;
     }
 
     // create proxy message prior to obfuscating
     string proxy = "";
-
     for(int i = 0; i < shift_code.length(); i++)
     {
         unsigned char temp = shift_value(buffer[i], shift_code[i]);
         proxy.append(1u, temp);
     }
 
-     
+     test_output << "\n" << shift_code;
+
     // close out file handles and exit
     test_output.close();
     return resultCode;
@@ -107,7 +108,7 @@ char generate_proxy_val(int seed)
     char result = '0';
     
     // generate by seed, a digit between 1 and 9
-    srand(time(NULL));
+    srand(seed);
     int rando = rand() % 10;
     if(!rando && rando != 9) {rando++;}
 
