@@ -1,20 +1,16 @@
-/******************************************************************************
-
-                              Online C++ Compiler.
-               Code, Compile, Run and Debug C++ program online.
-Write your code in this editor and press "Run" button to compile and execute it.
-
-*******************************************************************************/
-
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
-using namespace std;
 
-char shift_value(char c, int shift_val);
-std::string generate_token(int optional_seed);
+using std::ofstream;
+using std::string;
+using std::to_string;
+
+
+unsigned char shift_value(char c, int shift_val);
+string generate_token(int optional_seed);
 char generate_proxy_val(int seed);
 
 int main ()
@@ -25,20 +21,20 @@ int main ()
     test_output.open("token.txt");
 
     // Create token to obfuscate encrypted message later
-    std::string token = generate_token(0);
+    string token = generate_token(0);
 
     // Get input message and populate buffer
-    std::string input = "This is a big ass, motherfucking, test message.";
-    std::string buffer = "";
+    string input = "This Is a PARTICULArly LARGE MESSAGE with emphasis on dynamically typed capitalizetion. (in others, it is dummy THICC)";
+    string buffer = "";
     for(char c : input)
     {
-        if(c != ' ' && c != ',' && c != '.') { buffer.append(1u, c); }
+        if( (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ) { buffer.append(1u, c); }
     }
 
     // Create shift_code and new random for this session
     srand(time(NULL));
     int seed_increment = rand() % 1000;
-    std::string shift_code = "";
+    string shift_code = "";
 
     for(char c : buffer)
     {
@@ -47,34 +43,43 @@ int main ()
     }
 
     // create proxy message prior to obfuscating
-    std::string proxy = "";
+    string proxy = "";
 
     for(int i = 0; i < shift_code.length(); i++)
     {
-        char temp = shift_value(buffer[i], shift_code[i]);
-        test_output << temp;
+        unsigned char temp = shift_value(buffer[i], shift_code[i]);
         proxy.append(1u, temp);
     }
 
-
-    test_output << "\n";
-    for(char c : shift_code)
-    {
-        test_output << c;
-    }
      
     // close out file handles and exit
     test_output.close();
     return resultCode;
 }
 
-char shift_value(char c, int shift_val)
+
+unsigned char shift_value(char c, int shift_val)
 {
-    char temp = c + (shift_val - '0');
-    if ( temp > 'Z' )
+    // TODO (Luis): consider adding a randomized boolean of some kind, maybe check if a randomly generated val between 0 and 100 is less than 50, 
+    // to then randomly change a value from uppercase to lowercase and vice-versa
+    unsigned char temp = c + (shift_val - '0');
+    char rollOver;
+    if (c > 'Z')
     {
-        char roll_over = temp - 'Z';
-        temp = '@' + roll_over;
+        if (temp > 'z')
+        {
+            rollOver = temp - 'z';
+            temp = rollOver + '`';
+        }
+        // no rollover needed, within bounds.
+    }
+    else
+    {
+        if(temp > 'Z')
+        {
+            rollOver = temp - 'Z';
+            temp = rollOver + '@';
+        }
     }
 
     return temp;
@@ -82,7 +87,7 @@ char shift_value(char c, int shift_val)
 
 
 
-std::string generate_token(int optional_seed)
+string generate_token(int optional_seed)
 {
     if(!optional_seed)
     {
@@ -93,7 +98,7 @@ std::string generate_token(int optional_seed)
         srand(time(NULL));
     }
     
-    return std::to_string(rand() % 100000); // generate 5-digit random number
+    return to_string(rand() % 100000); // generate 5-digit random number
 }
 
 
@@ -110,3 +115,6 @@ char generate_proxy_val(int seed)
     // 48+1 = 49 in ASCII == '1' 
     return result + rando;
 }
+
+
+//end of file
