@@ -14,6 +14,8 @@ string generate_token(int optional_seed);
 char generate_proxy_val(int seed);
 char generate_obfuscating_val( int seed );
 
+string decrypt(string message, string token);
+
 int main ()
 {
     // init
@@ -55,7 +57,6 @@ int main ()
         proxy.append(1u, temp);
     }
 
-    
 
     string encryptedMessage;
     seed = 100;
@@ -67,7 +68,7 @@ int main ()
         encryptedMessage.append(1u, proxy[i] );
 
         // obfuscate 
-        for (int k = 1; k <= token[tokenPosition]; k++)
+        for (int k = 1; k <= (token[tokenPosition] - '0'); k++)
         {
             srand(seed + rand() % 1000);
             seed = rand();
@@ -78,12 +79,8 @@ int main ()
         tokenPosition++;
     }
 
-    test_output << input << "\n";
-    test_output << token << "\n";
-    test_output << buffer << "\n";
-    test_output << shift_code << "\n";
-    test_output << proxy << "\n";
-    finalOutput << encryptedMessage << "\n";
+    finalOutput << encryptedMessage;
+    
 
     // close out file handles and exit
     test_output.close();
@@ -150,6 +147,14 @@ char generate_obfuscating_val( int seed )
     
 
     return char(temp);
+}
+
+string decrypt(string message, string token)
+{
+    
+
+
+    return "yiy";
 }
 
 //end of file
