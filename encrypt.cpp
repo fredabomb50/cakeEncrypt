@@ -9,7 +9,7 @@ using std::string;
 using std::to_string;
 
 unsigned char shift_any_value(char c, int shift_val);
-unsigned char shift_value(char c, int shift_val);
+char shift_value(char c, int shift_val);
 string generate_token(int optional_seed);
 char generate_proxy_val(int seed);
 char generate_obfuscating_val( int seed );
@@ -51,7 +51,7 @@ int main ()
     string proxy = "";
     for(int i = 0; i < shift_code.length(); i++)
     {
-        unsigned char temp = shift_any_value(buffer[i], shift_code[i]);
+        char temp = shift_value(buffer[i], shift_code[i]);
         proxy.append(1u, temp);
     }
 
@@ -92,40 +92,15 @@ int main ()
 }
 
 
-unsigned char shift_any_value(char c, int shift_val)
+char shift_value(char c, int shift_val)
 {
-    // TODO (Luis): consider adding a randomized boolean of some kind, maybe check if a randomly generated val between 0 and 100 is less than 50, 
-    // to then randomly change a value from uppercase to lowercase and vice-versa
-
-    unsigned char temp = c + (shift_val - '0');
-    return temp;
-}
-
-
-unsigned char shift_value(char c, int shift_val)
-{
-    // TODO (Luis): consider adding a randomized boolean of some kind, maybe check if a randomly generated val between 0 and 100 is less than 50, 
-    // to then randomly change a value from uppercase to lowercase and vice-versa
     unsigned char temp = c + (shift_val - '0');
     char rollOver;
-    if (c > 'Z')
-    {
-        if (temp > 'z')
-        {
-            rollOver = temp - 'z';
-            temp = rollOver + '`';
-        }
-        // no rollover needed, within bounds.
-    }
-    else
-    {
-        if(temp > 'Z')
-        {
-            rollOver = temp - 'Z';
-            temp = rollOver + '@';
-        }
 
-        // no rollover needed, within bounds.
+    if ( temp > 126 )
+    {
+        rollOver = temp - 126;
+        temp = rollOver + 31;
     }
 
     return temp;
@@ -169,9 +144,10 @@ char generate_obfuscating_val( int seed )
 
     int temp = rand() % 101;
     if( temp > 0 && temp < 33 ) { temp = ('A' + ( rand() % ('Z' - 'A' + 1) )); }
-    if( temp > 33 && temp < 66 ) { temp = ('a' + ( rand() % ('z' - 'a' + 1) )); }
-    if( temp > 66 && temp < 101 ) { temp = ('0' + ( rand() % ('9' - '0' + 1) )); }
-
+    else if( temp > 33 && temp < 66 ) { temp = ('a' + ( rand() % ('z' - 'a' + 1) )); }
+    else if( temp > 66 && temp < 101 ) { temp = ('0' + ( rand() % ('9' - '0' + 1) )); }
+    else { temp = 63; }
+    
 
     return char(temp);
 }
