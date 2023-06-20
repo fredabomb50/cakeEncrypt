@@ -8,13 +8,17 @@ using std::ofstream;
 using std::string;
 using std::to_string;
 
+// Encrypt
 unsigned char shift_any_value(char c, int shift_val);
 char shift_value(char c, int shift_val);
 string generate_token(int optional_seed);
 char generate_proxy_val(int seed);
 char generate_obfuscating_val( int seed );
 
+// Decrypt
 string decrypt(string message, string token);
+string remove_filler_values( string message, string token );
+
 
 int main ()
 {
@@ -28,7 +32,7 @@ int main ()
     string token = generate_token(0);
 
     // Get input message and populate buffer
-    string input = "(THICC af text goes here! yaya)";
+    string input = "This is a test message.";
     string buffer = "";
     for(char c : input)
     {
@@ -80,7 +84,7 @@ int main ()
     }
 
     finalOutput << encryptedMessage;
-    
+    test_output << remove_filler_values( encryptedMessage, token );
 
     // close out file handles and exit
     test_output.close();
@@ -151,10 +155,35 @@ char generate_obfuscating_val( int seed )
 
 string decrypt(string message, string token)
 {
-    
-
-
     return "yiy";
 }
+
+
+string remove_filler_values( string message, string token )
+{
+    string result = "";
+    int tokenPos = 0;
+
+    for( int i = 0; i < message.length(); i++ )
+    {
+        // pull next character into buffer, which will be the very first character
+        // or the shift_code assigned to the previous valid character
+        result.append(1u, message[i]);
+
+        // reset token stepper to 0, if max reached
+        if ( tokenPos >= token.length() ) { tokenPos = 0; }
+
+        for ( int k = 0; k <= (token[tokenPos - '0']); k++ )
+        {
+            i++;
+        }
+
+        result.append(1u, message[i]);
+        tokenPos++;
+    }
+
+    return result;
+}
+
 
 //end of file
