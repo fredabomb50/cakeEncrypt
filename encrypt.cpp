@@ -32,7 +32,7 @@ int main ()
     string token = generate_token(0);
 
     // Get input message and populate buffer
-    string input = "This is a test message.";
+    string input = "lOnger tEstzzz!";
     string buffer = "";
     for(char c : input)
     {
@@ -83,6 +83,9 @@ int main ()
         tokenPosition++;
     }
 
+    test_output << token << "\n";
+    test_output << shift_code << "\n";
+    test_output << proxy << "\n";
     finalOutput << encryptedMessage;
     test_output << remove_filler_values( encryptedMessage, token );
 
@@ -153,6 +156,7 @@ char generate_obfuscating_val( int seed )
     return char(temp);
 }
 
+
 string decrypt(string message, string token)
 {
     return "yiy";
@@ -173,7 +177,7 @@ string remove_filler_values( string message, string token )
         // reset token stepper to 0, if max reached
         if ( tokenPos >= token.length() ) { tokenPos = 0; }
 
-        for ( int k = 0; k <= (token[tokenPos - '0']); k++ )
+        for ( int k = 0; k <= (token[tokenPos] - '0'); k++ )
         {
             i++;
         }
