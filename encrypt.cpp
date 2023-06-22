@@ -175,7 +175,7 @@ string remove_filler_values( string message, string token )
         result.append(1u, message[i]);
 
         // reset token stepper to 0, if max reached
-        if ( tokenPos >= token.length() ) { tokenPos = 0; }
+        if ( tokenPos > token.length() ) { tokenPos = 0; }
 
         for ( int k = 0; k <= (token[tokenPos] - '0'); k++ )
         {
