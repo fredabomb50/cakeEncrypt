@@ -32,7 +32,7 @@ int main ()
     string token = generate_token(0);
 
     // Get input message and populate buffer
-    string input = "lOnger tEstzzz!";
+    string input = "tezties!";
     string buffer = "";
     for(char c : input)
     {
@@ -166,24 +166,25 @@ string decrypt(string message, string token)
 string remove_filler_values( string message, string token )
 {
     string result = "";
-    int tokenPos = 0;
+    int tokenIndex = 0;
+    int tokenCounter = 0;
 
     for( int i = 0; i < message.length(); i++ )
     {
-        // pull next character into buffer, which will be the very first character
-        // or the shift_code assigned to the previous valid character
+        // pull next character, which will be the very first character, or the character proceeding a shift code
         result.append(1u, message[i]);
 
-        // reset token stepper to 0, if max reached
-        if ( tokenPos > token.length() ) { tokenPos = 0; }
-
-        for ( int k = 0; k <= (token[tokenPos] - '0'); k++ )
+        while( tokenCounter <= (token[tokenIndex] - '0') )
         {
             i++;
+            tokenCounter++;
         }
 
         result.append(1u, message[i]);
-        tokenPos++;
+        if ( tokenIndex < token.length() ) { tokenIndex++; }
+        else { tokenIndex = 0; }
+
+        tokenCounter = 0;
     }
 
     return result;
