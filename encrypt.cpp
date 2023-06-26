@@ -163,6 +163,7 @@ string decrypt(string message, string token)
 }
 
 
+// fuck this shjit is fucking fucked
 string remove_filler_values( string message, string token )
 {
     string result = "";
