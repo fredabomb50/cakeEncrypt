@@ -169,10 +169,11 @@ string remove_filler_values( string message, string token )
     int tokenIndex = 0;
     int tokenCounter = 0;
 
-    for( int i = 0; i < message.length(); i++ )
+    result.append(1u, message[0]);
+
+    for( int i = 1; i < message.length(); i++ )
     {
-        // pull next character, which will be the very first character, or the character proceeding a shift code
-        result.append(1u, message[i]);
+        if (i != 1) { result.append(1u, message[i]); }
 
         while( tokenCounter <= (token[tokenIndex] - '0') )
         {
