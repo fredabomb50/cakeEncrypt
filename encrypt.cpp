@@ -32,7 +32,7 @@ int main ()
     string token = generate_token(0);
 
     // Get input message and populate buffer
-    string input = "aaaaa";
+    string input = "aaaaaaa";
     string buffer = "";
     for(char c : input)
     {
