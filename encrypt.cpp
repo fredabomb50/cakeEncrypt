@@ -32,7 +32,7 @@ int main ()
     string token = generate_token(0);
 
     // Get input message and populate buffer
-    string input = "wowzers!@";
+    string input = "aaaaa";
     string buffer = "";
     for(char c : input)
     {
@@ -191,8 +191,10 @@ string remove_filler_values( string message, string token )
             result.append(1u, message[messageIndex]);
             messageIndex++;
         }
+        else { break; }
     }
 
+    result.append(1u, message[(message.length() - 1)]);
 
     return result;
 }
