@@ -32,7 +32,7 @@ int main ()
     string token = generate_token(0);
 
     // Get input message and populate buffer
-    string input = "tezties!";
+    string input = "wowzers!@";
     string buffer = "";
     for(char c : input)
     {
@@ -169,25 +169,30 @@ string remove_filler_values( string message, string token )
     string result = "";
     int tokenIndex = 0;
     int tokenCounter = 0;
+    int messageIndex = 0;
 
-    result.append(1u, message[0]);
+    result.append(1u, message[messageIndex]);
+    messageIndex++;
 
-    for( int i = 1; i < message.length(); i++ )
+    while (messageIndex < message.length())
     {
-        if (i != 1) { result.append(1u, message[i]); }
-
-        while( tokenCounter <= (token[tokenIndex] - '0') )
+        if (tokenIndex >= (token.length() - 1)) { tokenIndex = 0; }
+        while(tokenCounter < (token[tokenIndex] - '0') && messageIndex < message.length())
         {
-            i++;
+            messageIndex++;
             tokenCounter++;
         }
-
-        result.append(1u, message[i]);
-        if ( tokenIndex < token.length() ) { tokenIndex++; }
-        else { tokenIndex = 0; }
-
         tokenCounter = 0;
+        result.append(1u, message[messageIndex]);
+        tokenIndex++;
+        messageIndex++;
+        if ((messageIndex < message.length()))
+        {
+            result.append(1u, message[messageIndex]);
+            messageIndex++;
+        }
     }
+
 
     return result;
 }
