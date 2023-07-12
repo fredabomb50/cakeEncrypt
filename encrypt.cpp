@@ -112,7 +112,10 @@ char shift_value(char c, int shift_val)
 
 char origin_value( char c, int shift_val )
 {
+    
     char result;
+
+
 
     return result;
 }
