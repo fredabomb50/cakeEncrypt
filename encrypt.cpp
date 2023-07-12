@@ -68,7 +68,7 @@ int main ()
     for ( int i = 0; i < proxy.length(); i++ )
     {
         // check if we have exceeded token, at which point loop back to start of token
-        if ( tokenPosition > token.length() ) {tokenPosition = 0;}
+        if ( tokenPosition > token.length() - 1 ) {tokenPosition = 0;}
         encryptedMessage.append(1u, proxy[i] );
 
         // obfuscate 
@@ -176,7 +176,11 @@ string remove_filler_values( string message, string token )
 
     while (messageIndex < message.length())
     {
-        if (tokenIndex >= (token.length() - 1)) { tokenIndex = 0; }
+        if (tokenIndex > (token.length() - 1))
+        {
+            tokenIndex = 0;
+        }
+
         while(tokenCounter < (token[tokenIndex] - '0') && messageIndex < message.length())
         {
             messageIndex++;
