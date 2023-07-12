@@ -110,6 +110,12 @@ char shift_value(char c, int shift_val)
     return temp;
 }
 
+char origin_value( char c, int shift_val )
+{
+    char result;
+
+    return result;
+}
 
 string generate_token(int optional_seed)
 {
