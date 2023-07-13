@@ -89,6 +89,8 @@ int main ()
     finalOutput << encryptedMessage;
     test_output << remove_filler_values( encryptedMessage, token );
 
+    //origin_value( char c, int shift_val )
+
     // close out file handles and exit
     test_output.close();
     finalOutput.close();
@@ -112,12 +114,16 @@ char shift_value(char c, int shift_val)
 
 char origin_value( char c, int shift_val )
 {
-    
-    char result;
+    unsigned char temp = c - (shift_val - '0');
+    char rollOver;
 
+    if ( temp < 32 )
+    {
+        rollOver = 32 - temp;
+        temp = 127 - rollOver;
+    }
 
-
-    return result;
+    return temp;
 }
 
 string generate_token(int optional_seed)
