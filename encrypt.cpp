@@ -18,6 +18,7 @@ char generate_obfuscating_val( int seed );
 // Decrypt
 string decrypt(string message, string token);
 string remove_filler_values( string message, string token );
+char origin_value( char c, int shift_val );
 
 
 int main ()
@@ -25,14 +26,14 @@ int main ()
     // init
     int resultCode = 0;
     ofstream  test_output, finalOutput;
-    test_output.open("token.txt");
-    finalOutput.open("encrypted.txt");
+    test_output.open("test.txt");
+    finalOutput.open("final_result.txt");
 
     // Create token to obfuscate encrypted message later
     string token = generate_token(0);
 
     // Get input message and populate buffer
-    string input = "aaaaaaa";
+    string input = "zxckjnalishfo98q34lkjna.sdc";
     string buffer = "";
     for(char c : input)
     {
@@ -83,13 +84,21 @@ int main ()
         tokenPosition++;
     }
 
-    test_output << token << "\n";
-    test_output << shift_code << "\n";
-    test_output << proxy << "\n";
-    finalOutput << encryptedMessage;
-    test_output << remove_filler_values( encryptedMessage, token );
+    string unobfuscated_text = remove_filler_values( encryptedMessage, token );
+    string final_result;
+    for (int i = 0; i < unobfuscated_text.length() - 1; i++)
+    {
+        if ( i == 1 ) { continue; }
 
-    //origin_value( char c, int shift_val )
+        if ( i % 2 == 0 )
+        {
+           final_result.append(1u, origin_value( unobfuscated_text[i], unobfuscated_text[i + 1] ) ); 
+        }
+    }
+
+    finalOutput << final_result;
+    test_output << unobfuscated_text << "\n";
+
 
     // close out file handles and exit
     test_output.close();
