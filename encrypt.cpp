@@ -20,9 +20,24 @@ string decrypt(string message, string token);
 string remove_filler_values( string message, string token );
 char origin_value( char c, int shift_val );
 
-
-int main ()
+/*
+ argv[1] - Token used to encrypt. Can be a file path or number
+ argv[2] - Path to text file to encrypt
+ argv[3] - [optional]Filename for .cake output. Defaults to safe-ish.cake
+*/
+int main ( int argc, char** argv )
 {
+    // user needs to enter at least 1 argument; else CLI tool is useless
+    if (!(argc > 1)) { return 0; }
+
+    string token = argv[1];
+    string input_path = argv[2];
+    string output_name = "safe-ish.cake";
+
+    // if user enters an output filename, override the default
+    if (argc > 2) { output_name = argv[3]; }
+        
+
     // init
     int resultCode = 0;
     ofstream  test_output, finalOutput;
