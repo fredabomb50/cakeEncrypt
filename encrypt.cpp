@@ -7,6 +7,8 @@
 using std::ofstream;
 using std::string;
 using std::to_string;
+using std::exception;
+
 
 // Encrypt
 unsigned char shift_any_value(char c, int shift_val);
@@ -27,22 +29,38 @@ char origin_value( char c, int shift_val );
 */
 int main ( int argc, char** argv )
 {
-    // user needs to enter at least 1 argument; else CLI tool is useless
-    if (!(argc > 1)) { return 0; }
+    // init
+    int res = 0;
+    exception e_handler;
 
+    // argc validation
+    if (!(argc > 1)) { return res; }
+
+    // argv[] usage
     string token = argv[1];
     string input_path = argv[2];
     string output_name = "safe-ish.cake";
 
-    // if user enters an output filename, override the default
+    // argv[3] validation
     if (argc > 2) { output_name = argv[3]; }
         
 
-    // init
-    int resultCode = 0;
-    ofstream  test_output, finalOutput;
-    test_output.open("test.txt");
-    finalOutput.open("final_result.txt");
+    // file handler validation    
+    ofstream input_file, debug, output_file;
+    try
+    {
+        debug.open("output_file.txt");
+        input_file.open(input_path);
+        output_file.open(output_name + ".cake");
+        
+    }
+    catch ( exception failure )
+    {
+        debug << "ERROR:: Failed to open input or output!";
+        debug.close();
+        return res;
+    }
+    
 
     // Create token to obfuscate encrypted message later
     string token = generate_token(0);
@@ -111,14 +129,14 @@ int main ( int argc, char** argv )
         }
     }
 
-    finalOutput << final_result;
-    test_output << unobfuscated_text << "\n";
+    output_file << final_result;
+    debug << unobfuscated_text << "\n";
 
 
     // close out file handles and exit
-    test_output.close();
-    finalOutput.close();
-    return resultCode;
+    debug.close();
+    output_file.close();
+    return res;
 }
 
 
