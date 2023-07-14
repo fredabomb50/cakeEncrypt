@@ -136,6 +136,7 @@ int main ( int argc, char** argv )
     // close out file handles and exit
     debug.close();
     output_file.close();
+    input_file.close();
     return res;
 }
 
