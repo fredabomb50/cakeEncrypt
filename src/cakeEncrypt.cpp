@@ -3,24 +3,21 @@
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sstream>
 
 using std::ofstream;
 using std::string;
 using std::to_string;
 using std::exception;
-
+using std::ifstream;
+using std::stringstream;
+using std::stoi;
 
 // Encrypt
-unsigned char shift_any_value(char c, int shift_val);
 char shift_value(char c, int shift_val);
-string generate_token(int optional_seed);
 char generate_proxy_val(int seed);
 char generate_obfuscating_val( int seed );
 
-// Decrypt
-string decrypt(string message, string token);
-string remove_filler_values( string message, string token );
-char origin_value( char c, int shift_val );
 
 /*
  argv[1] - Token used to encrypt. Can be a file path or number
@@ -31,12 +28,26 @@ int main ( int argc, char** argv )
 {
     // init
     int res = 0;
+    ifstream input;
+    stringstream buffer;
 
     // argc validation
     if (!(argc > 1)) { return res; }
 
-    // argv[] usage
-    string token = argv[1];
+    string token = 0;
+    try
+    {
+        if ( stoi(argv[1]) )
+        { 
+
+        }
+        else {  }
+    }
+    catch (invalid_argument invalid)
+    {
+
+    }
+
     string input_path = argv[2];
     string output_name = "safe-ish.cake";
 
@@ -49,7 +60,8 @@ int main ( int argc, char** argv )
     try
     {
         debug.open("output_file.txt");
-        input_file.open(input_path);
+        input.open(input_path);
+        buffer << input.rdbuf();
         output_file.open(output_name + ".cake");
         
     }
@@ -59,25 +71,15 @@ int main ( int argc, char** argv )
         debug.close();
         return res;
     }
-    
 
-    // Create token to obfuscate encrypted message later
-    string token = generate_token(0);
+    // Get input message
+    string input_string = buffer.str();
 
-
-    // Get input message and populate buffer
-    string input = "zxckjnalishfo98q34lkjna.sdc";
-    string buffer = "";
-    for(char c : input)
-    {
-        // if( (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c == ' ') )
-        buffer.append(1u, c);
-    }
 
     // Create shift_code
     int seed = 100;
     string shift_code = "";
-    for(char c : buffer)
+    for(char c : input_string)
     {
         srand(seed++);
         seed = rand() % 1000;
@@ -91,7 +93,7 @@ int main ( int argc, char** argv )
     string proxy = "";
     for(int i = 0; i < shift_code.length(); i++)
     {
-        char temp = shift_value(buffer[i], shift_code[i]);
+        char temp = shift_value(input_string[i], shift_code[i]);
         proxy.append(1u, temp);
     }
 
@@ -117,20 +119,6 @@ int main ( int argc, char** argv )
         tokenPosition++;
     }
 
-    string unobfuscated_text = remove_filler_values( encryptedMessage, token );
-    string final_result;
-    for (int i = 0; i < unobfuscated_text.length() - 1; i++)
-    {
-        if ( i == 1 ) { continue; }
-
-        if ( i % 2 == 0 )
-        {
-           final_result.append(1u, origin_value( unobfuscated_text[i], unobfuscated_text[i + 1] ) ); 
-        }
-    }
-
-    output_file << final_result;
-    debug << unobfuscated_text << "\n";
 
 
     // close out file handles and exit
@@ -154,35 +142,6 @@ char shift_value(char c, int shift_val)
 
     return temp;
 }
-
-char origin_value( char c, int shift_val )
-{
-    unsigned char temp = c - (shift_val - '0');
-    char rollOver;
-
-    if ( temp < 32 )
-    {
-        rollOver = 32 - temp;
-        temp = 127 - rollOver;
-    }
-
-    return temp;
-}
-
-string generate_token(int optional_seed)
-{
-    if(!optional_seed)
-    {
-        srand(optional_seed);
-    }
-    else
-    {
-        srand(time(NULL));
-    }
-    
-    return to_string(rand() % 100000); // generate 5-digit random number
-}
-
 
 char generate_proxy_val(int seed)
 {
@@ -215,47 +174,8 @@ char generate_obfuscating_val( int seed )
 }
 
 
-
-
-// fuck this shjit is fucking fucked
-string remove_filler_values( string message, string token )
+string validate_FileAsString( string path )
 {
-    string result = "";
-    int tokenIndex = 0;
-    int tokenCounter = 0;
-    int messageIndex = 0;
-
-    result.append(1u, message[messageIndex]);
-    messageIndex++;
-
-    while (messageIndex < message.length())
-    {
-        if (tokenIndex > (token.length() - 1))
-        {
-            tokenIndex = 0;
-        }
-
-        while(tokenCounter < (token[tokenIndex] - '0') && messageIndex < message.length())
-        {
-            messageIndex++;
-            tokenCounter++;
-        }
-        tokenCounter = 0;
-        result.append(1u, message[messageIndex]);
-        tokenIndex++;
-        messageIndex++;
-        if ((messageIndex < message.length()))
-        {
-            result.append(1u, message[messageIndex]);
-            messageIndex++;
-        }
-        else { break; }
-    }
-
-    result.append(1u, message[(message.length() - 1)]);
-
-    return result;
+    
 }
-
-
 //end of file
