@@ -27,6 +27,7 @@ int main (int argc, char** argv)
     // init
     int res = 0;
     ifstream input;
+    input.exceptions(ifstream::failbit | ifstream::badbit);
     stringstream buffer;
 
     // argc validation
@@ -38,7 +39,7 @@ int main (int argc, char** argv)
     string output_name = "cake.txt";
 
     // argv[3] validation
-    if (argc > 2) { output_name = argv[3]; }
+    if (argc > 3) { output_name = argv[3]; }
         
 
     // file handler validation    
@@ -52,7 +53,7 @@ int main (int argc, char** argv)
         output_file.open(output_name + ".txt");
         
     }
-    catch ( exception failure )
+    catch ( ifstream::failure io_fail )
     {
         debug << "ERROR:: Failed to open input or create output!";
         debug.close();

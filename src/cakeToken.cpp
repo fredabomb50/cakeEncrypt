@@ -21,7 +21,7 @@ int main (int argc, char** argv)
     
 
     ofstream output;
-    output.open("token.cake");
+    output.open("token.txt");
     output << generate_token(seed);
 
     output.close();

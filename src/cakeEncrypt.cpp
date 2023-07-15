@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sstream>
+#include <exception>
 
 using std::ofstream;
 using std::string;
@@ -28,31 +29,36 @@ int main ( int argc, char** argv )
 {
     // init
     int res = 0;
-    ifstream input;
-    stringstream buffer;
+    ifstream input, token_stream;
+    token_stream.exceptions(ifstream::failbit | ifstream::badbit);
+    stringstream input_buffer, token_buffer;
 
     // argc validation
     if (!(argc > 1)) { return res; }
 
-    string token = 0;
+    string token = "32165";
     try
     {
-        if ( stoi(argv[1]) )
-        { 
-
-        }
-        else {  }
+        // if the token arg can't be converted to an integer, it may be the file path to one
+        if ( stoi(argv[1]) ) { token = argv[1]; }
     }
-    catch (invalid_argument invalid)
-    {
-
+    catch (std::invalid_argument invalid)
+    { 
+        // try to read arg as a file path containing the token
+        try
+        {
+            token_stream.open(argv[1]);
+            token_buffer << token_stream.rdbuf();
+            token = token_buffer.str();
+        }
+        catch(ifstream::failure read_fail) { return 0; }
     }
 
     string input_path = argv[2];
-    string output_name = "safe-ish.cake";
+    string output_name = "safe-ish";
 
     // argv[3] validation
-    if (argc > 2) { output_name = argv[3]; }
+    if (argc > 3) { output_name = argv[3]; }
         
 
     // file handler validation    
@@ -61,8 +67,8 @@ int main ( int argc, char** argv )
     {
         debug.open("output_file.txt");
         input.open(input_path);
-        buffer << input.rdbuf();
-        output_file.open(output_name + ".cake");
+        input_buffer << input.rdbuf();
+        output_file.open(output_name + ".txt");
         
     }
     catch ( exception failure )
@@ -73,7 +79,7 @@ int main ( int argc, char** argv )
     }
 
     // Get input message
-    string input_string = buffer.str();
+    string input_string = input_buffer.str();
 
 
     // Create shift_code
@@ -119,7 +125,7 @@ int main ( int argc, char** argv )
         tokenPosition++;
     }
 
-
+    output_file << encryptedMessage;
 
     // close out file handles and exit
     debug.close();
@@ -173,9 +179,4 @@ char generate_obfuscating_val( int seed )
     return char(temp);
 }
 
-
-string validate_FileAsString( string path )
-{
-    
-}
 //end of file
