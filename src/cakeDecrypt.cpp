@@ -36,7 +36,7 @@ int main (int argc, char** argv)
     // argv[] usage
     string token = argv[1];
     string input_path = argv[2];
-    string output_name = "cake.txt";
+    string output_name = "cake";
 
     // argv[3] validation
     if (argc > 3) { output_name = argv[3]; }
