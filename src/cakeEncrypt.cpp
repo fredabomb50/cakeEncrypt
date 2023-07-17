@@ -6,6 +6,7 @@
 #include <sstream>
 #include <exception>
 
+
 using std::ofstream;
 using std::string;
 using std::to_string;
@@ -34,7 +35,7 @@ int main ( int argc, char** argv )
     stringstream input_buffer, token_buffer;
 
     // argc validation
-    if (!(argc > 1)) { return res; }
+    if (!(argc > 1)){ return res; }
 
     string token = "32165";
     try
