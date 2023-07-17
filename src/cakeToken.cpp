@@ -1,41 +1,25 @@
-#include <iostream>
 #include <fstream>
-#include <stdio.h>
-#include <stdlib.h>
 
 using std::ofstream;
-using std::string;
 using std::to_string;
 using std::stoi;
 
-string generate_token(int optional_seed);
-
-/*
- argv[1] - *optional* Token used to decrypt. 
-*/
+// argv[1] - *optional* Token to be shared and used. 
 int main (int argc, char** argv)
 { 
-    int seed = argc < 2 ? 0 : stoi(argv[1]);
+    // init
     ofstream output;
+    int res = 0, seed = 0;
+
+    // validate arg
+    seed = argc < 2 ? 0 : stoi(argv[1]);
+    if(!seed) { srand(seed); } else { srand(time(NULL)); }
+   
+    // store token
     output.open("token.cake");
-    output << generate_token(seed);
+    output << to_string(rand() % 100000);
 
+    // exit and close
     output.close();
-    return 0;
-}
-
-
-string generate_token(int optional_seed)
-{
-    if(!optional_seed)
-    {
-        srand(optional_seed);
-    }
-    else
-    {
-        srand(time(NULL));
-    }
-    
-    // 5-digit random number
-    return to_string(rand() % 100000); 
+    return res;
 }
