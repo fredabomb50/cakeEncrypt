@@ -11,7 +11,7 @@ using std::to_string;
 using std::exception;
 using std::ifstream;
 using std::stringstream;
-
+using std::stoi;
 
 // declarations
 char origin_value( char c, int shift_val );
@@ -26,21 +26,38 @@ int main (int argc, char** argv)
 { 
     // init
     int res = 0;
-    ifstream input;
+    ifstream input, token_stream;
     input.exceptions(ifstream::failbit | ifstream::badbit);
-    stringstream buffer;
+    token_stream.exceptions(ifstream::failbit | ifstream::badbit);
+    stringstream buffer, token_buffer;
 
     // argc validation
     if (!(argc > 1)) { return res; }
 
-    // argv[] usage
-    string token = argv[1];
     string input_path = argv[2];
     string output_name = "cake";
 
     // argv[3] validation
     if (argc > 3) { output_name = argv[3]; }
         
+
+    string token = "32165";
+    try
+    {
+        // if the token arg can't be converted to an integer, it may be the file path to one
+        if ( stoi(argv[1]) ) { token = argv[1]; }
+    }
+    catch (std::invalid_argument invalid)
+    { 
+        // try to read arg as a file path containing the token
+        try
+        {
+            token_stream.open(argv[1]);
+            token_buffer << token_stream.rdbuf();
+            token = token_buffer.str();
+        }
+        catch(ifstream::failure read_fail) { return 0; }
+    }
 
     // file handler validation    
     ofstream input_file, debug, output_file;
