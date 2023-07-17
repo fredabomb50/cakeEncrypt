@@ -1,21 +1,9 @@
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sstream>
-
-using std::ofstream;
-using std::string;
-using std::to_string;
-using std::exception;
-using std::ifstream;
-using std::stringstream;
-using std::stoi;
+#include "header.hpp"
 
 // declarations
 char origin_value( char c, int shift_val );
 string remove_filler_values( string message, string token );
+
 
 /*
  argv[1] - Token used to decrypt. Can be a file path or number
@@ -26,13 +14,17 @@ int main (int argc, char** argv)
 { 
     // init
     int res = 0;
-    ifstream input, token_stream;
-    input.exceptions(ifstream::failbit | ifstream::badbit);
-    token_stream.exceptions(ifstream::failbit | ifstream::badbit);
-    stringstream buffer, token_buffer;
 
     // argc validation
     if (!(argc > 1)) { return res; }
+
+    // declare streams and register exceptions
+    ifstream src_stream, token_stream;
+    src_stream.exceptions(ifstream::failbit | ifstream::badbit);
+    token_stream.exceptions(ifstream::failbit | ifstream::badbit);
+
+
+    stringstream src_buffer, token_buffer;
 
     string input_path = argv[2];
     string output_name = "cake";
@@ -64,21 +56,21 @@ int main (int argc, char** argv)
     try
     {
         debug.open("output_file.txt");
-        input.open(input_path);
-        buffer << input.rdbuf();
+        src_stream.open(input_path);
+        src_buffer << src_stream.rdbuf();
          
         output_file.open(output_name + ".txt");
         
     }
     catch ( ifstream::failure io_fail )
     {
-        debug << "ERROR:: Failed to open input or create output!";
+        debug << "ERROR:: Failed to open src or create output!";
         debug.close();
         return res;
     }
 
     // pull buffer into string for decryption
-    string temp = buffer.str();
+    string temp = src_buffer.str();
 
     // remove filler values
     string unobfuscated_text = remove_filler_values( temp, token );

@@ -1,21 +1,6 @@
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sstream>
-#include <exception>
+#include "header.hpp"
 
-
-using std::ofstream;
-using std::string;
-using std::to_string;
-using std::exception;
-using std::ifstream;
-using std::stringstream;
-using std::stoi;
-
-// Encrypt
+// declarations
 char shift_value(char c, int shift_val);
 char generate_proxy_val(int seed);
 char generate_obfuscating_val( int seed );
