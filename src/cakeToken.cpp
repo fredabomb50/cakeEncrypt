@@ -15,13 +15,9 @@ string generate_token(int optional_seed);
 */
 int main (int argc, char** argv)
 { 
-    int seed;
-    if (argc < 2 ) { seed = 0; }
-    else { seed = stoi(argv[1]); }
-    
-
+    int seed = argc < 2 ? 0 : stoi(argv[1]);
     ofstream output;
-    output.open("token.txt");
+    output.open("token.cake");
     output << generate_token(seed);
 
     output.close();

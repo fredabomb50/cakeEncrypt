@@ -55,7 +55,7 @@ int main ( int argc, char** argv )
     }
 
     string input_path = argv[2];
-    string output_name = "safe-ish";
+    string output_name = "safe";
 
     // argv[3] validation
     if (argc > 3) { output_name = argv[3]; }
@@ -68,7 +68,7 @@ int main ( int argc, char** argv )
         debug.open("output_file.txt");
         input.open(input_path);
         input_buffer << input.rdbuf();
-        output_file.open(output_name + ".txt");
+        output_file.open(output_name + ".cake");
         
     }
     catch ( exception failure )
